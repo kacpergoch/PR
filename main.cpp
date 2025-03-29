@@ -3,10 +3,10 @@
 #include <string>
 using namespace std;
 
-void sequential_matrix_multiply(int** matrix_result,const int n, const int** matrix_A, const int** matrix_B) {
+void sequential_matrix_multiply(int** matrix_result,const int n, int** matrix_A, int** matrix_B) {
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {
-            matrix_result[i][j] = 0; // Initialize the result element to zero
+            matrix_result[i][j] = 0;
             for (int k = 0; k < n; k++) {
                 matrix_result[i][j] += matrix_A[i][k] * matrix_B[k][j];
             }
@@ -14,29 +14,82 @@ void sequential_matrix_multiply(int** matrix_result,const int n, const int** mat
     }
 }
 
-void read_matrix_from_file(const string filename, int** matrix) {
-    ifstream file_stream;
-    file_stream.open(filename);
+bool read_matrix_from_file(const string& filename, int** &matrix, int &rows, int &cols) {
+    ifstream file_stream(filename);
     if (!file_stream.is_open()) {
+        cerr << "Error: Could not open file " << filename << endl;
+        return false;
+    }
+
+    file_stream >> rows >> cols;
+
+    matrix = new int*[rows];
+    for (int i = 0; i < rows; i++) {
+        matrix[i] = new int[cols];
+        for (int j = 0; j < cols; j++) {
+            file_stream >> matrix[i][j];
+        }
+    }
+
+    file_stream.close();
+    return true;
+}
+
+int** allocate_matrix(const int rows, const int cols) {
+    int** matrix = new int*[rows];
+    for (int i = 0; i < rows; i++) {
+        matrix[i] = new int[cols];
+    }
+    return matrix;
+}
+
+void free_matrix(int** matrix, const int rows) {
+    for (int i = 0; i < rows; i++) {
+        delete[] matrix[i];
+    }
+    delete[] matrix;
+}
+
+
+void test_matrix_multiplication(const string& file_A, const string& file_B) {
+    int** A = nullptr;
+    int** B = nullptr;
+    int** C = nullptr;
+    int rows_A, cols_A, rows_B, cols_B;
+
+    if (!read_matrix_from_file(file_A, A, rows_A, cols_A) ||
+        !read_matrix_from_file(file_B, B, rows_B, cols_B)) {
+        return; // Error already printed
+        }
+
+    if (cols_A != rows_B) {
+        cerr << "Error: Matrices cannot be multiplied (cols_A != rows_B)\n";
+        free_matrix(A, rows_A);
+        free_matrix(B, rows_B);
         return;
     }
 
-    int n = 0, m = 0, value = 0;
-    int** temp_matrix = new int*[n];
-    file_stream >> n >> m;
-    for (int i = 0; i < n; i++) {
-        temp_matrix[i] = new int[m];
-        for (int j = 0; j < m; j++) {
-            file_stream >> value;
-            temp_matrix[i][j] = svalue;
-        }
-    }
-    matrix = temp_matrix;
+    C = allocate_matrix(rows_A, cols_B);
+
+    cout << "Multiplying " << rows_A << "x" << cols_A << " with " << rows_B << "x" << cols_B << "...\n";
+
+
+    sequential_matrix_multiply(C, rows_A, A, B);
+
+
+    free_matrix(A, rows_A);
+    free_matrix(B, rows_B);
+    free_matrix(C, rows_A);
 }
 
 int main() {
-    int** matrix = nullptr;
-    read_matrix_from_file("matrices/10_10.txt", matrix);
-    delete[] matrix;
+    string base_path = "matrices/";
+    string sizes[] = {"10_10", "100_100", "500_500", "1000_1000", "2000_2000"};
+
+    for (const string& size : sizes) {
+        test_matrix_multiplication(base_path + std::string(size) + "_A.txt", base_path + std::string(size) + "_B.txt");
+        cout << "-----------------------------------\n";
+    }
+
     return 0;
 }
