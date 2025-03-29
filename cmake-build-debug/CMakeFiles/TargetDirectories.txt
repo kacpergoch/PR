@@ -1,0 +1,3 @@
+/home/kacper/CLionProjects/PR/cmake-build-debug/CMakeFiles/PR.dir
+/home/kacper/CLionProjects/PR/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/kacper/CLionProjects/PR/cmake-build-debug/CMakeFiles/rebuild_cache.dir
