@@ -1,0 +1,33 @@
+####
+Sprawdzenie która metoda równoleglenia jest najlepsza
+###
+Multiplying 10x10 with 10x10...
+Method 0 time: 1.2e-06s
+Method 1 time: 0.0006582s
+Method 2 time: 0.0008419s
+Method 3 time: 0.0082552s
+-----------------------------------
+Multiplying 100x100 with 100x100...
+Method 0 time: 0.0006781s
+Method 1 time: 0.0007075s
+Method 2 time: 0.0080202s
+Method 3 time: 0.811507s
+-----------------------------------
+Multiplying 500x500 with 500x500...
+Method 0 time: 0.0813552s
+Method 1 time: 0.0181627s
+Method 2 time: 0.0576646s
+Method 3 time: 17.9936s
+-----------------------------------
+Multiplying 1000x1000 with 1000x1000...
+Method 0 time: 0.823718s
+Method 1 time: 0.265044s
+Method 2 time: 0.321239s
+Method 3 time: 77.207s
+-----------------------------------
+Multiplying 2000x2000 with 2000x2000...
+Method 0 time: 25.9729s
+Method 1 time: 6.53454s
+Method 2 time: 6.96943s
+Method 3 time: 312.296s
+-----------------------------------
